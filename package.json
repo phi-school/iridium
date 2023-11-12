@@ -1,0 +1,57 @@
+{
+	"private": true,
+	"workspaces": [
+		"packages/*",
+		"scripts/*"
+	],
+	"scripts": {
+		"build": "turbo build",
+		"create-package": "node scripts/create-package",
+		"dev": "turbo dev --no-cache --continue",
+		"format:check": "prettier --check \"**/*.{js,json,md,ts}\"",
+		"format": "prettier --write \"**/*.{js,json,md,ts}\"",
+		"lint": "turbo lint",
+		"prepare": "husky install",
+		"publish": "changeset publish",
+		"release": "pnpm run build && pnpm run publish",
+		"test": "turbo test",
+		"type-check": "turbo type-check"
+	},
+	"devDependencies": {
+		"@changesets/cli": "^2.26.2",
+		"@commitlint/cli": "^18.2.0",
+		"@commitlint/config-conventional": "^18.1.0",
+		"@commitlint/load": "^18.2.0",
+		"@phi.school/eslint-config": "^0.2.0",
+		"@phi.school/prettier-config": "^0.1.0",
+		"@types/node": "^20.8.10",
+		"@vitest/ui": "^0.34.6",
+		"dotenv": "^16.3.1",
+		"eslint": "^8.53.0",
+		"husky": "^8.0.3",
+		"lint-staged": "^15.0.2",
+		"opencommit": "^3.0.4",
+		"prettier": "^3.0.3",
+		"tsup": "^7.2.0",
+		"turbo": "^1.10.16",
+		"typescript": "^5.2.2",
+		"valibot": "^0.20.1",
+		"vite-tsconfig-paths": "^4.2.1",
+		"vitest": "^0.34.6"
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
+	},
+	"eslintConfig": {
+		"extends": [
+			"@phi.school/eslint-config"
+		]
+	},
+	"lint-staged": {
+		"*.{js,ts}": "eslint --cache --fix",
+		"*.{js,json,md,ts}": "prettier --write"
+	},
+	"prettier": "@phi.school/prettier-config"
+}

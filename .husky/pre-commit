@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+# If the HUSKY environment variable is set to "false", exit the script early.
+# This is used to bypass Husky in the CI/CD environment.
+[ "$HUSKY" = "false" ] && exit 0
+
+source "$(dirname -- "$0")/_/husky.sh"
+
+pnpm lint-staged

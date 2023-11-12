@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"allowImportingTsExtensions": true,
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"paths": {
+			"@/env": ["./env"]
+		},
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "esnext",
+		"types": ["vitest/importMeta"]
+	},
+	"exclude": ["**/dist/**"],
+	"include": ["env"]
+}

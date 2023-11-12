@@ -1,0 +1,11 @@
+.cache
+.DS_Store
+.eslintcache
+.opencommit-commitlint
+.turbo
+.turbo
+*.env
+*.local
+*.log
+dist
+node_modules

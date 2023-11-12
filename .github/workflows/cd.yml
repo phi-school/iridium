@@ -1,0 +1,46 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - 'main'
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install devbox
+        uses: jetpack-io/devbox-install-action@v0.7.0
+        with:
+          enable-cache: 'true'
+          project-path: './'
+
+      # Disable Husky's git hooks from interfering with Changesets' git commit
+      - name: Disable Husky
+        run: echo "HUSKY=false" >> $GITHUB_ENV
+      
+      # The changesets action is expected to create an .npmrc file with the
+      # NPM_TOKEN for publishing to npm if it doesn’t exist. However, this isn’t
+      # occurring, leading to workflow failures. The issue could stem from the
+      # changesets action's dependency on the node setup action, which is
+      # managed by the Devbox action in our case. The following step fixes this
+      # by manually setting up the .npmrc file.
+      - name: Setup .npmrc file
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: devbox run -- pnpm release
+          title: 📦 Version and Release Packages
+          commit: 📦 Version and Release Packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
