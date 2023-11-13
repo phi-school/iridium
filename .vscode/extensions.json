@@ -1,9 +1,16 @@
 {
 	"recommendations": [
+		"artdiniz.quitcontrol-vscode",
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
+		"gruntfuggly.todo-tree",
+		"mhutchie.git-graph",
 		"richie5um2.vscode-sort-json",
+		"stkb.rewrap",
 		"streetsidesoftware.code-spell-checker",
-		"wayou.vscode-todo-highlight"
+		"wayou.vscode-todo-highlight",
+		"yoavbls.pretty-ts-errors",
+		"yzhang.markdown-all-in-one",
+		"zihanli.at-helper"
 	]
 }
