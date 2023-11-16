@@ -42,6 +42,13 @@ export async function getMultiTemplateVariables(
 		const filledVariable = { ...variable, filledValue } as FilledVariable
 
 		filledMultiTemplateVariables.push(filledVariable)
+
+		// This 'fixes' an issue with Bun which causes
+		// successive clack function calls to fail.
+		//
+		// https://github.com/natemoo-re/clack/issues/170
+		// https://github.com/oven-sh/bun/issues/6052
+		await (() => void 0)()
 	}
 
 	return filledMultiTemplateVariables
