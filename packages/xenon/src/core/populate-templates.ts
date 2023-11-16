@@ -9,6 +9,7 @@ import type {
 	RenderedConfig,
 	FilledVariable,
 	RenderedTemplate,
+	Primitive,
 } from '@/types'
 
 // TODO Improve comment
@@ -64,16 +65,20 @@ export async function populateTemplates(
 				// If a global variable is found and it's not already defined locally,
 				// add it to the variablesMap.
 				if (globalVariable && !variablesMap.has(variableName)) {
-					variablesMap.set(variableName, {
+					const { filledValue } = globalVariable
+
+					const filledGlobalVariable = {
 						...globalVariable,
-						filledValue: globalVariable.filledValue || '',
-					})
+						filledValue,
+					} as unknown as FilledVariable
+
+					variablesMap.set(variableName, filledGlobalVariable)
 				}
 			}
 		}
 
 		// Initialize an object to store the merged variables for rendering.
-		const mergedVariables = {} as Record<string, string>
+		const mergedVariables = {} as Record<string, Primitive | Primitive[]>
 
 		// Iterate over the variablesMap and add each variable to the
 		// mergedVariables object.
@@ -111,7 +116,14 @@ if (import.meta.vitest) {
 					sourcePath: testSourcePath,
 					outputPath: mockOutputPath,
 					variables: [
-						{ name: 'name', userPrompt: 'Enter name', filledValue: 'World' },
+						{
+							name: 'name',
+							type: 'text',
+							filledValue: 'World',
+							clackOptions: {
+								message: 'Enter name',
+							},
+						},
 					],
 				},
 			],
@@ -151,12 +163,15 @@ if (import.meta.vitest) {
 
 	test('populateTemplates merges multiTemplateVariables correctly', async () => {
 		// Define a mock configuration with multiTemplateVariables.
-		const mockConfig: ConfigWithData = {
+		const mockConfig = {
 			configDirectory: '',
 			multiTemplateVariables: [
 				{
 					name: 'globalName',
-					userPrompt: 'Enter global name',
+					type: 'text',
+					clackOptions: {
+						message: 'Enter global name',
+					},
 					filledValue: 'Global',
 				},
 			],
@@ -165,12 +180,19 @@ if (import.meta.vitest) {
 					sourcePath: 'test/fixtures/templates/mock-template.art',
 					outputPath: mockOutputPath,
 					variables: [
-						{ name: 'name', userPrompt: 'Enter name', filledValue: 'Local' },
+						{
+							name: 'name',
+							type: 'text',
+							clackOptions: {
+								message: 'Enter name',
+							},
+							filledValue: 'Local',
+						},
 					],
 					useMultiTemplateVariables: ['globalName'],
 				},
 			],
-		}
+		} as ConfigWithData
 
 		// Call the function with the mock configuration.
 		const result = await populateTemplates(mockConfig)

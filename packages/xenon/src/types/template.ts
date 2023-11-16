@@ -13,7 +13,7 @@ export type Options = { value: Primitive; label?: string; hint?: string }[]
 
 // ────────────────────────────── Variable Types ───────────────────────────────
 
-export type BaseVariable = {
+type BaseVariable = {
 	name: string
 }
 
@@ -155,10 +155,10 @@ export type ResolvedConfig = RawConfig & {
  */
 export type ConfigWithData = ResolvedConfig & {
 	/** An optional array of filled multi-template variables. */
-	multiTemplateVariables?: FilledVariable
+	multiTemplateVariables?: FilledVariable[]
 	/** An array of `PopulatedTemplate` objects representing the templates with
 	 * filled variables. */
-	templates: PopulatedTemplate
+	templates: PopulatedTemplate[]
 }
 
 /**
@@ -169,5 +169,5 @@ export type ConfigWithData = ResolvedConfig & {
 export type RenderedConfig = ConfigWithData & {
 	/** An array of `RenderedTemplate` objects representing the fully rendered
 	 * templates. */
-	templates: RenderedTemplate
+	templates: RenderedTemplate[]
 }
