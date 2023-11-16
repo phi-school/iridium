@@ -1,30 +1,65 @@
-// ──────────────────────────── Template Variables ─────────────────────────────
+import type {
+	TextOptions,
+	ConfirmOptions,
+	SelectOptions,
+	MultiSelectOptions,
+} from '@clack/prompts'
 
-/**
- * Represents a template variable that has not been filled with a user-provided
- * value. It includes necessary details such as the variable's name, a prompt
- * for the user, and an optional default value.
- */
-export type UnfilledVariable = {
-	/** The name of the variable, used as a key to replace placeholders in
-	 * templates. */
+// ───────────────────────── Clack Select Option Types ─────────────────────────
+
+export type Primitive = Readonly<string | boolean | number>
+
+export type Options = { value: Primitive; label?: string; hint?: string }[]
+
+// ────────────────────────────── Variable Types ───────────────────────────────
+
+export type BaseVariable = {
 	name: string
-	/** The user prompt text displayed in the CLI to guide the user to provide a
-	 * value for this variable. */
-	userPrompt: string
-	/** An optional default value for the variable, used if the user does not
-	 * provide a value. */
-	defaultValue?: string
 }
 
-/**
- * Extends `UnfilledVariable` and represents a template variable that has been
- * filled with a user-provided value.
- */
-export type FilledVariable = UnfilledVariable & {
-	/** The user-provided value for the variable. */
-	filledValue: string
+export type TextVariable = BaseVariable & {
+	type: 'text'
+	clackOptions: TextOptions
 }
+
+export type ConfirmVariable = BaseVariable & {
+	type: 'confirm'
+	clackOptions: ConfirmOptions
+}
+
+export type SelectVariable = BaseVariable & {
+	type: 'select'
+	clackOptions: SelectOptions<Options, Primitive>
+}
+
+export type MultiSelectVariable = BaseVariable & {
+	type: 'multiselect'
+	clackOptions: MultiSelectOptions<Options, Primitive>
+}
+
+// ────────────────────────────── Variable States ──────────────────────────────
+
+export type UnfilledVariable =
+	| TextVariable
+	| ConfirmVariable
+	| SelectVariable
+	| MultiSelectVariable
+
+export type FilledValueByType<T> = T extends 'text'
+	? string
+	: T extends 'confirm'
+	  ? boolean
+	  : T extends 'select'
+	    ? Primitive
+	    : T extends 'multiselect'
+	      ? Primitive[]
+	      : never
+
+export type FilledVariable = {
+	[K in UnfilledVariable as K['type']]: K & {
+		filledValue: FilledValueByType<K['type']>
+	}
+}[UnfilledVariable['type']]
 
 // ──────────────────────────── Template Base Type ─────────────────────────────
 
@@ -120,10 +155,10 @@ export type ResolvedConfig = RawConfig & {
  */
 export type ConfigWithData = ResolvedConfig & {
 	/** An optional array of filled multi-template variables. */
-	multiTemplateVariables?: FilledVariable[]
+	multiTemplateVariables?: FilledVariable
 	/** An array of `PopulatedTemplate` objects representing the templates with
 	 * filled variables. */
-	templates: PopulatedTemplate[]
+	templates: PopulatedTemplate
 }
 
 /**
@@ -134,5 +169,5 @@ export type ConfigWithData = ResolvedConfig & {
 export type RenderedConfig = ConfigWithData & {
 	/** An array of `RenderedTemplate` objects representing the fully rendered
 	 * templates. */
-	templates: RenderedTemplate[]
+	templates: RenderedTemplate
 }

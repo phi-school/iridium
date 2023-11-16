@@ -1,6 +1,6 @@
-import enquirer from 'enquirer'
+import { confirm, multiselect, select, text } from '@clack/prompts'
 
-import { FilledVariable, UnfilledVariable } from '@/types'
+import type { FilledVariable, Primitive, UnfilledVariable } from '@/types'
 
 /**
  * Prompts the user for input to fill the multi-template variables using the
@@ -16,19 +16,32 @@ export async function getMultiTemplateVariables(
 	const filledMultiTemplateVariables: FilledVariable[] = []
 
 	for (const variable of multiTemplateVariables) {
-		const { defaultValue, name, userPrompt } = variable
+		const { clackOptions, type } = variable
 
-		const answer = (await enquirer.prompt({
-			type: 'input',
-			name,
-			message: userPrompt,
-			initial: defaultValue,
-		})) as Record<string, string>
+		let filledValue: Primitive | Primitive[]
 
-		filledMultiTemplateVariables.push({
-			...variable,
-			filledValue: answer[name],
-		})
+		switch (type) {
+			case 'text': {
+				filledValue = (await text(clackOptions)) as string
+				break
+			}
+			case 'confirm': {
+				filledValue = (await confirm(clackOptions)) as boolean
+				break
+			}
+			case 'select': {
+				filledValue = (await select(clackOptions)) as Primitive
+				break
+			}
+			case 'multiselect': {
+				filledValue = (await multiselect(clackOptions)) as Primitive[]
+				break
+			}
+		}
+
+		const filledVariable = { ...variable, filledValue } as FilledVariable
+
+		filledMultiTemplateVariables.push(filledVariable)
 	}
 
 	return filledMultiTemplateVariables

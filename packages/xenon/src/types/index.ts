@@ -2,6 +2,7 @@ export type {
 	ConfigWithData,
 	FilledVariable,
 	PopulatedTemplate,
+	Primitive,
 	RawConfig,
 	RenderedConfig,
 	RenderedTemplate,

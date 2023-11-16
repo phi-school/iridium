@@ -1,6 +1,11 @@
-import enquirer from 'enquirer'
+import { confirm, multiselect, select, text } from '@clack/prompts'
 
-import { UnpopulatedTemplate, PopulatedTemplate, FilledVariable } from '@/types'
+import type {
+	UnpopulatedTemplate,
+	PopulatedTemplate,
+	FilledVariable,
+	Primitive,
+} from '@/types'
 
 /**
  * Prompts the user to input values for variables in each template and returns
@@ -23,19 +28,39 @@ export async function getSingleTemplateVariables(
 			const filledVariables: FilledVariable[] = []
 
 			for (const variable of variables) {
-				const { defaultValue, name, userPrompt } = variable
+				const { clackOptions, type } = variable
 
-				const answer = (await enquirer.prompt({
-					type: 'input',
-					name,
-					message: userPrompt,
-					initial: defaultValue,
-				})) as Record<string, string>
+				let filledValue: Primitive | Primitive[]
 
-				filledVariables.push({
-					...variable,
-					filledValue: answer[name],
-				})
+				switch (type) {
+					case 'text': {
+						filledValue = (await text(clackOptions)) as string
+						break
+					}
+					case 'confirm': {
+						filledValue = (await confirm(clackOptions)) as boolean
+						break
+					}
+					case 'select': {
+						filledValue = (await select(clackOptions)) as Primitive
+						break
+					}
+					case 'multiselect': {
+						filledValue = (await multiselect(clackOptions)) as Primitive[]
+						break
+					}
+				}
+
+				const filledVariable = { ...variable, filledValue } as FilledVariable
+
+				filledVariables.push(filledVariable)
+
+				// This 'fixes' an issue with Bun which causes
+				// successive clack function calls to fail.
+				//
+				// https://github.com/natemoo-re/clack/issues/170
+				// https://github.com/oven-sh/bun/issues/6052
+				await (() => void 0)()
 			}
 
 			populatedTemplates.push({
