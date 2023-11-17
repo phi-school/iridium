@@ -1,16 +1,22 @@
 export type {
 	ConfigWithData,
+	RawConfig,
+	RenderedConfig,
+	ResolvedConfig,
+} from './config'
+
+export type {
+	PopulatedTemplate,
+	RenderedTemplate,
+	UnpopulatedTemplate,
+} from './template'
+
+export type {
 	ConfirmVariable,
 	FilledVariable,
 	MultiSelectVariable,
-	PopulatedTemplate,
 	Primitive,
-	RawConfig,
-	RenderedConfig,
-	RenderedTemplate,
-	ResolvedConfig,
 	SelectVariable,
 	TextVariable,
 	UnfilledVariable,
-	UnpopulatedTemplate,
-} from './template'
+} from './variables'
