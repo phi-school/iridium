@@ -2,6 +2,9 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig({
 	clean: true,
+	define: {
+		'import.meta.vitest': 'false',
+	},
 	dts: true,
 	format: ['cjs', 'esm'],
 	minify: true,

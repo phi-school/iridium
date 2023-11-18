@@ -8,8 +8,5 @@ export default mergeConfig(
 		test: {
 			includeSource: ['src/**/*.{js,ts}'],
 		},
-		resolve: {
-			alias: {},
-		},
 	}),
 )
