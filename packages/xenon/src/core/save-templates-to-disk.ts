@@ -23,7 +23,7 @@ export async function saveTemplatesToDisk(
 	for (const template of templates) {
 		const { outputPath, render, sourcePath } = template
 
-		// Derive output file name from the template file name, replacing the '.art'
+		// Derive output file name from the template file name, replacing the '.liquid'
 		// extension with ''.
 		const outputFileName = `${parse(sourcePath).name}`
 
@@ -52,7 +52,7 @@ export async function saveTemplatesToDisk(
 if (import.meta.vitest) {
 	const { test, expect } = import.meta.vitest
 
-	const mockSourcePath = 'mock-file.txt.art'
+	const mockSourcePath = 'mock-file.txt.liquid'
 	const mockOutputPath = 'test-output'
 	const mockRender = 'Hello, this is a test!'
 	const mockOutputFilePath = `${mockOutputPath}/mock-file.txt`

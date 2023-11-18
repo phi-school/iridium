@@ -106,7 +106,7 @@ export async function populateTemplates(
 if (import.meta.vitest) {
 	const { test, expect } = import.meta.vitest
 
-	const testSourcePath = 'test/fixtures/templates/mock-template.art'
+	const testSourcePath = 'test/fixtures/templates/mock-template.liquid'
 	const mockOutputPath = 'mock/output/path'
 
 	test('populateTemplates renders templates correctly', async () => {
@@ -150,7 +150,7 @@ if (import.meta.vitest) {
 			configDirectory: '',
 			templates: [
 				{
-					sourcePath: 'test/fixtures/non-existing-template.art',
+					sourcePath: 'test/fixtures/non-existing-template.liquid',
 					outputPath: mockOutputPath,
 					variables: [],
 				},
@@ -178,7 +178,7 @@ if (import.meta.vitest) {
 			],
 			templates: [
 				{
-					sourcePath: 'test/fixtures/templates/mock-template.art',
+					sourcePath: 'test/fixtures/templates/mock-template.liquid',
 					outputPath: mockOutputPath,
 					variables: [
 						{
