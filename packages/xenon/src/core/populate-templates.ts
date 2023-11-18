@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-import * as artTemplate from 'art-template'
+import { Liquid } from 'liquidjs'
 
 import { TemplateReadError } from '@/error-handling'
 import type {
@@ -86,7 +86,8 @@ export async function populateTemplates(
 			mergedVariables[variable.name] = variable.filledValue
 		})
 
-		const render = artTemplate.render(templateContent, mergedVariables)
+		const liquid = new Liquid()
+		const render = await liquid.parseAndRender(templateContent, mergedVariables)
 
 		renderedTemplates.push({
 			...template,

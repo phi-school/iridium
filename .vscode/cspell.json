@@ -3,6 +3,7 @@
 		"commitlint",
 		"devbox",
 		"jetpack",
+		"liquidjs",
 		"openai",
 		"opencommit",
 		"outro",
